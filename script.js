@@ -54,16 +54,20 @@ function generateOutput() {
     let output = `/give @p ${input.itemId}{`;
 
     // Item Name
+    input.name = input.name.replaceAll("'", "\\'").replaceAll("\"", "\\\"");
     output += `display:{Name:'{"text":"${input.name}","color":"${rarities[input.rarity].color}","italic":false}'`;
 
     // Lore
     output += `,Lore:['PlaceholderLore'` // PlaceholderLore tag gets removed, only here for leading comma support.
 
     // Item description
+    let descriptionnbt = ""
     if (input.description != "") {
         input.description = input.description.replaceAll("'", "\\'").replaceAll("\"", "\\\"");
         output += `,'{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`);
+        descriptionnbt += `['{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`) + `]`;
     }
+    console.log(descriptionnbt);
 
     // Stats
     let statnbt = `{Placeholder:1b` // Placeholder tag gets removed, only here for leading comma support.
@@ -133,7 +137,17 @@ function generateOutput() {
     output = output.replace("'PlaceholderLore',", "").replace("'PlaceholderLore'", "");
 
     // Remaining tags
-    output += `},HideFlags:7,Unbreakable:1b`;
+
+    // Lore generator tags
+    output += `}`
+    if (descriptionnbt != "") {
+        output += `,Description:${descriptionnbt}`;
+    }
+
+    output += `,Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
+    
+    // Remaining tags (stats, hideflags, attributes...)
+    output += `,HideFlags:7,Unbreakable:1b`;
     if (statnbt != "{}") {
         output += `,Stats:${statnbt},BaseStats:${statnbt}`;
     }
