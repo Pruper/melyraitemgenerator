@@ -144,7 +144,7 @@ function generateOutput() {
         output += `,Description:${descriptionnbt}`;
     }
 
-    output += `,Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
+    output += `,Name:"${input.name}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
     
     // Remaining tags (stats, hideflags, attributes...)
     output += `,HideFlags:7,Unbreakable:1b`;
