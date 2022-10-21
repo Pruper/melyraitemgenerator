@@ -62,7 +62,7 @@ function generateOutput() {
     // Item description
     if (input.description != "") {
         input.description = input.description.replaceAll("'", "\\'").replaceAll("\"", "\\\"");
-        output += `,'{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\n", `","color":"dark_gray"}','{"text":"`);
+        output += `,'{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`);
     }
 
     // Stats
