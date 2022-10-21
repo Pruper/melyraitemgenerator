@@ -144,7 +144,9 @@ function generateOutput() {
         output += `,Description:${descriptionnbt}`;
     }
 
-    output += `,Name:"${input.name}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
+    let outputnamenbttag = input.name.replaceAll("\\'", "'").replaceAll("\\\"", "\"")
+    console.log(outputnamenbttag);
+    output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
     
     // Remaining tags (stats, hideflags, attributes...)
     output += `,HideFlags:7,Unbreakable:1b`;
