@@ -133,9 +133,9 @@ function generateOutput() {
     output = output.replace("'PlaceholderLore',", "").replace("'PlaceholderLore'", "");
 
     // Remaining tags
-    output += `},HideFlags:7,Unbreakable:1b,`;
+    output += `},HideFlags:7,Unbreakable:1b`;
     if (statnbt != "{}") {
-        output += `Stats:${statnbt},BaseStats:${statnbt}`;
+        output += `,Stats:${statnbt},BaseStats:${statnbt}`;
     }
     output += `${input.canBeUpgraded === true ? ",Level:0" : ""},AttributeModifiers:[{AttributeName:"generic.luck",Name:"generic.luck",Amount:-0.000999999999,Operation:0,UUID:${types[input.type].attributeUuid.id},Slot:"${types[input.type].attributeUuid.slot}"}]}`;
 
