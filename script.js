@@ -54,7 +54,7 @@ function generateOutput() {
     let output = `/give @p ${input.itemId}{`;
 
     // Item Name
-    input.name = input.name.replaceAll("'", "\\'").replaceAll("\"", "\\\"");
+    input.name = input.name.replaceAll("'", "\\'").replaceAll("\"", "\\" + "\\\"");
     output += `display:{Name:'{"text":"${input.name}","color":"${rarities[input.rarity].color}","italic":false}'`;
 
     // Lore
@@ -63,7 +63,7 @@ function generateOutput() {
     // Item description
     let descriptionnbt = ""
     if (input.description != "") {
-        input.description = input.description.replaceAll("'", "\\'").replaceAll("\"", "\\\"");
+        input.description = input.description.replaceAll("'", "\\'").replaceAll("\"", "\\" + "\\\"");
         output += `,'{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`);
         descriptionnbt += `['{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`) + `]`;
     }
