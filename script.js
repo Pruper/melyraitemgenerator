@@ -16,6 +16,7 @@ let input = {
     canBeUpgraded: true,
     stat_health: 0,
     stat_defense: 0,
+    stat_strength: 0,
     stat_damage: 0,
     stat_critical: 0,
     stat_mana: 0,
@@ -89,6 +90,11 @@ function generateOutput() {
     // Stat Group 2
     if (input.stat_damage != 0 || input.stat_critical != 0 || input.stat_mana != 0) {
         output += `,'{"text":""}'`;
+        if (input.stat_strength != 0) {
+            output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
+            statnbt += `,Strength:${input.stat_strength}`;
+        }
+        
         if (input.stat_damage != 0) {
             output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Damage: ","color":"gray"},{"text":"${getSign(input.stat_damage)}","color":"red"}]'`;
             statnbt += `,Damage:${input.stat_damage}`;
@@ -184,6 +190,9 @@ function generateCommand() {
 
     currentValue = document.getElementById("input_stat_defense").value;
     input.stat_defense = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+
+    currentValue = document.getElementById("input_stat_strength").value;
+    input.stat_strength = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
 
     currentValue = document.getElementById("input_stat_damage").value;
     input.stat_damage = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
