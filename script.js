@@ -24,6 +24,26 @@ let input = {
     stat_arcane: 0
 }
 
+const colorCodes = {
+    dark_red: "AA0000",
+    red: "FF5555",
+    gold: "FFAA00",
+    yellow: "FFFF55",
+    dark_green: "00AA00",
+    green: "55FF55",
+    aqua: "55FFFF",
+    dark_aqua: "00AAAA",
+    dark_blue: "0000AA",
+    blue: "5555FF",
+    light_purple: "FF55FF",
+    dark_purple: "AA00AA",
+    white: "FFFFFF",
+    gray: "AAAAAA",
+    dark_gray: "555555",
+    black: "000000",
+}
+
+
 const rarities = [
     { name: "Common", color: "white" },
     { name: "Uncommon", color: "green" },
@@ -152,7 +172,7 @@ function generateOutput() {
 
     let outputnamenbttag = input.name.replaceAll("\\'", "'").replaceAll("\\\"", "\"")
     console.log(outputnamenbttag);
-    output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}'`
+    output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}',LevelColor:'{"text":"","color":"${"#" + darkenColor(rarities[input.rarity].color, -85)}"}'`
     
     // Remaining tags (stats, hideflags, attributes...)
     output += `,HideFlags:7,Unbreakable:1b`;
@@ -218,3 +238,16 @@ function getSign(number) {
     }
     return number;
 }
+
+function darkenColor(color, amount) {
+    if (typeof colorCodes[color] != 'undefined') {
+        color = colorCodes[color];
+    }
+
+    var number = parseInt(color, 16);
+    var r = (number >> 16) + amount;
+    var b = ((number >> 8) & 0x00FF) + amount;
+    var g = (number & 0x0000FF) + amount;
+    var newColor = g | (b << 8) | (r << 16);
+    return newColor.toString(16);
+  }
