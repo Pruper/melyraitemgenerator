@@ -238,12 +238,16 @@ function generatePreview() {
     loadInputs();
 
     let element = document.getElementById("outputPreview");
-    let name = JSON.parse(getStringBetweenTwoStrings(generateOutput(), "Name:", ",Lore").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]"));
-    let loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Name").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]");
+
+    let name = JSON.parse(getStringBetweenTwoStrings(generateOutput(), "Name:", ",Lore").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]").replaceAll("\\" + "\\\"", "\\" + "\"").replaceAll("\\\'", "'"));
+
+    let loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Name").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]").replaceAll("\\" + "\\" + "\\" + "\\" + "\\\"", "\"").replaceAll("\\" + "\\" + "\\\'", "'");
 
     if (loreList.length < 1) {
-        loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Description").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]");
+        loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Description").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]").replaceAll("\\" + "\\" + "\\" + "\\" + "\\\"", "\"").replaceAll("\\" + "\\" + "\\\'", "'");
     }
+
+    console.log(loreList);
 
     loreList = JSON.parse(loreList);
     loreList.unshift(name);
