@@ -63,7 +63,7 @@ const attributeUuids = {
 
 const types = [
     { name: "", attributeUuid: attributeUuids.MAINHAND }, // Normal item
-    { name: "Sword", attributeUuid: attributeUuids.MAINHAND},
+    { name: "Sword", attributeUuid: attributeUuids.MAINHAND },
     { name: "Bow", attributeUuid: attributeUuids.MAINHAND },
     { name: "Helmet", attributeUuid: attributeUuids.HEAD },
     { name: "Chestplate", attributeUuid: attributeUuids.CHEST },
@@ -88,7 +88,6 @@ function generateOutput() {
         output += `,'{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`);
         descriptionnbt += `['{"text":"${input.description}","color":"dark_gray"}'`.replaceAll("\\n", `","color":"dark_gray"}','{"text":"`) + `]`;
     }
-    console.log(descriptionnbt);
 
     // Stats
     let statnbt = `{Placeholder:1b` // Placeholder tag gets removed, only here for leading comma support.
@@ -114,7 +113,7 @@ function generateOutput() {
             output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
             statnbt += `,Strength:${input.stat_strength}`;
         }
-        
+
         if (input.stat_damage != 0) {
             output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Damage: ","color":"gray"},{"text":"${getSign(input.stat_damage)}","color":"red"}]'`;
             statnbt += `,Damage:${input.stat_damage}`;
@@ -171,9 +170,8 @@ function generateOutput() {
     }
 
     let outputnamenbttag = input.name.replaceAll("\\'", "'").replaceAll("\\\"", "\"")
-    console.log(outputnamenbttag);
     output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}',LevelColor:'{"text":"","color":"${"#" + darkenColor(rarities[input.rarity].color, -85)}"}'`
-    
+
     // Remaining tags (stats, hideflags, attributes...)
     output += `,HideFlags:7,Unbreakable:1b`;
     if (statnbt != "{}") {
@@ -184,14 +182,14 @@ function generateOutput() {
     return output;
 }
 
-function generateCommand() {
+function loadInputs() {
     let currentValue;
 
     currentValue = document.getElementById("input_itemId").value;
     input.itemId = currentValue != "" ? currentValue : "diamond_sword";
 
     currentValue = document.getElementById("input_name").value;
-    input.name = currentValue != "" ? currentValue : "Gigachad Sword";
+    input.name = currentValue != "" ? currentValue : "Unnamed";
 
     currentValue = document.getElementById("input_description").value;
     input.description = currentValue != "" ? currentValue : "";
@@ -228,8 +226,100 @@ function generateCommand() {
 
     currentValue = document.getElementById("input_stat_arcane").value;
     input.stat_arcane = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+}
+
+function generateCommand() {
+    loadInputs();
 
     document.getElementById("output").value = generateOutput();
+}
+
+function generatePreview() {
+    loadInputs();
+
+    let element = document.getElementById("outputPreview");
+    let name = JSON.parse(getStringBetweenTwoStrings(generateOutput(), "Name:", ",Lore").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]"));
+    let loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Name").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]");
+
+    if (loreList.length < 1) {
+        loreList = getStringBetweenTwoStrings(generateOutput(), "Lore:", "},Description").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]");
+    }
+
+    loreList = JSON.parse(loreList);
+    loreList.unshift(name);
+
+    let html = "";
+    for (i in loreList) {
+        html += generateColorTextFromJson(loreList[i]);
+        if (i != loreList.length - 1) {
+            html += "<br>"
+        }
+    }
+
+    element.innerHTML = `<p>${html}</p>`;
+}
+
+function generateColorTextFromJson(json) {
+    if (!Array.isArray(json)) {
+        json = [json];
+    }
+
+    let htmlLine = "";
+    let inheritedProperties = {
+        italic: json[0].italic,
+        bold: json[0].bold,
+        underlined: json[0].underlined,
+        strikethrough: json[0].strikethrough,
+        obfuscated: json[0].obfuscated
+    }
+    let inheritance = Object.keys(inheritedProperties)
+
+    for (i in json) {
+        for (j in inheritance) {
+            if (typeof json[i][inheritance[j]] === 'undefined') {
+                json[i][inheritance[j]] = inheritedProperties[inheritance[j]]
+            }
+        }
+
+        let html = `<span style="`;
+
+        if (typeof json[i].color != 'undefined') {
+            html += `color: #${getColor(json[i].color)};`
+        } else {
+            html += `color: #FFFFFF;`
+        }
+
+        // Italic by default
+        if (typeof json[i].italic === 'undefined') {
+            html += `font-style: italic;`
+        } else {
+            if (json[i].italic == true) {
+                html += `font-style: italic;`
+            }
+        }
+
+        if (typeof json[i].bold != 'undefined') {
+            if (json[i].bold == true) {
+                html += `font-weight: bold;`
+            }
+        }
+
+        if (typeof json[i].underlined != 'undefined' || typeof json[i].strikethrough != 'undefined') {
+            html += `text-decoration:${typeof json[i].underlined != 'undefined' ? (json[i].underlined == true ? " underline" : "") : ""}${typeof json[i].strikethrough != 'undefined' ? (json[i].strikethrough == true ? " line-through" : "") : ""};`
+        }
+
+        if (typeof json[i].obfuscated != 'undefined') {
+            if (json[i].obfuscated == true) {
+                json[i].text = json[i].text.replace(/\S/g, "#");
+            }
+        }
+
+        html += `">${json[i].text}</span>`;
+
+        htmlLine += html;
+    }
+
+    return htmlLine;
 }
 
 function getSign(number) {
@@ -237,6 +327,14 @@ function getSign(number) {
         return "+" + number;
     }
     return number;
+}
+
+function getColor(color) {
+    if (typeof colorCodes[color] != 'undefined') {
+        color = colorCodes[color];
+    }
+
+    return color;
 }
 
 function darkenColor(color, amount) {
@@ -250,4 +348,29 @@ function darkenColor(color, amount) {
     var g = (number & 0x0000FF) + amount;
     var newColor = g | (b << 8) | (r << 16);
     return newColor.toString(16);
-  }
+}
+
+function getStringBetweenTwoStrings(text, prefix, suffix) {
+    let string = text;
+    let i = string.indexOf(prefix);
+    if (i >= 0) {
+        string = string.substring(i + prefix.length);
+    }
+    else {
+        return '';
+    }
+    if (suffix) {
+        i = string.indexOf(suffix);
+        if (i >= 0) {
+            string = string.substring(0, i);
+        }
+        else {
+            return '';
+        }
+    }
+    return string;
+};
+
+
+document.getElementById("inputs").addEventListener("change", generatePreview)
+generatePreview();

@@ -6,96 +6,108 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melyra Item Generator</title>
+
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/minecraftia" type="text/css"/>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <p>
-        <label for="input_itemId">Item ID:</label>
-        <input type="text" placeholder="diamond_sword" id="input_itemId" name="input_itemId">
-    </p>
+    <div id="inputs">
+        <p>
+            <label for="input_itemId">Item ID:</label>
+            <input type="text" placeholder="diamond_sword" id="input_itemId" name="input_itemId">
+        </p>
 
-    <p>
-        <label for="input_name">Name:</label>
-        <input type="text" placeholder="Gigachad Sword" id="input_name" name="input_name">
-    </p>
+        <p>
+            <label for="input_name">Name:</label>
+            <input type="text" placeholder="Name of Item" id="input_name" name="input_name">
+        </p>
+
+        <br>
+
+        <p>Enter the description of the item. Use \n to begin a new line.</p>
+        <p>
+            <label for="input_description">Description:</label>
+            <input type="text" placeholder="Line 1\nLine 2" id="input_description" name="input_description">
+        </p>
+
+        <br>
+
+        <label for="input_rarity">Rarity:</label>
+        <select id="input_rarity" name="input_rarity">
+            <option value=0>Common</option>
+            <option value=1>Uncommon</option>
+            <option value=2>Rare</option>
+            <option value=3>Epic</option>
+            <option value=4>Legendary</option>
+        </select>
+
+        <label for="input_type">Type:</label>
+        <select id="input_type" name="input_type">
+            <option value=0>Regular Item</option>
+            <option value=1>Sword</option>
+            <option value=2>Bow</option>
+            <option value=3>Helmet</option>
+            <option value=4>Chestplate</option>
+            <option value=5>Leggings</option>
+            <option value=6>Boots</option>
+        </select>
+
+        <p>
+            <label for="input_canBeUpgraded">Can be upgraded? (has "This item can be upgraded" text)</label>
+            <input type="checkbox" id="input_canBeUpgraded" name="input_canBeUpgraded">
+        </p>
+
+        <br>
+        <p>Base Stats (leave at 0 if you don't want it applied to the item)</p>
+
+        <p>
+            <label for="input_stat_health">Health:</label>
+            <input type="number" value=0 id="input_stat_health" name="input_stat_health">
+        </p>
+
+        <p>
+            <label for="input_stat_defense">Defense:</label>
+            <input type="number" value=0 id="input_stat_defense" name="input_stat_defense">
+        </p>
+
+        <p>
+            <label for="input_stat_strength">Strength:</label>
+            <input type="number" value=0 id="input_stat_strength" name="input_stat_strength">
+        </p>
+
+        <p>
+            <label for="input_stat_damage">Damage:</label>
+            <input type="number" value=0 id="input_stat_damage" name="input_stat_damage">
+        </p>
+
+        <p>
+            <label for="input_stat_critical">Critical:</label>
+            <input type="number" value=0 id="input_stat_critical" name="input_stat_critical">
+        </p>
+
+        <p>
+            <label for="input_stat_mana">Mana:</label>
+            <input type="number" value=0 id="input_stat_mana" name="input_stat_mana">
+        </p>
+
+        <p>
+            <label for="input_stat_speed">Speed:</label>
+            <input type="number" value=0 id="input_stat_speed" name="input_stat_speed">
+        </p>
+
+        <p>
+            <label for="input_stat_arcane">Arcane:</label>
+            <input type="number" value=0 id="input_stat_arcane" name="input_stat_arcane">
+        </p>
+    </div>
 
     <br>
 
-    <p>Enter the description of the item. Use \n to begin a new line.</p>
-    <p>
-        <label for="input_description">Description:</label>
-        <input type="text" placeholder="Line 1\nLine 2" id="input_description" name="input_description">
-    </p>
+    <p>Preview:</p>
+    <div id="outputPreview">
 
-    <br>
-
-    <label for="input_rarity">Rarity:</label>
-    <select id="input_rarity" name="input_rarity">
-        <option value=0>Common</option>
-        <option value=1>Uncommon</option>
-        <option value=2>Rare</option>
-        <option value=3>Epic</option>
-        <option value=4>Legendary</option>
-    </select>
-
-    <label for="input_type">Type:</label>
-    <select id="input_type" name="input_type">
-        <option value=0>Regular Item</option>
-        <option value=1>Sword</option>
-        <option value=2>Bow</option>
-        <option value=3>Helmet</option>
-        <option value=4>Chestplate</option>
-        <option value=5>Leggings</option>
-        <option value=6>Boots</option>
-    </select>
-
-    <p>
-        <label for="input_canBeUpgraded">Can be upgraded? (has "This item can be upgraded" text)</label>
-        <input type="checkbox" id="input_canBeUpgraded" name="input_canBeUpgraded">
-    </p>
-
-    <br>
-    <p>Base Stats (leave at 0 if you don't want it applied to the item)</p>
-
-    <p>
-        <label for="input_stat_health">Health:</label>
-        <input type="number" value=0 id="input_stat_health" name="input_stat_health">
-    </p>
-
-    <p>
-        <label for="input_stat_defense">Defense:</label>
-        <input type="number" value=0 id="input_stat_defense" name="input_stat_defense">
-    </p>
-
-    <p>
-        <label for="input_stat_strength">Strength:</label>
-        <input type="number" value=0 id="input_stat_strength" name="input_stat_strength">
-    </p>
-
-    <p>
-        <label for="input_stat_damage">Damage:</label>
-        <input type="number" value=0 id="input_stat_damage" name="input_stat_damage">
-    </p>
-
-    <p>
-        <label for="input_stat_critical">Critical:</label>
-        <input type="number" value=0 id="input_stat_critical" name="input_stat_critical">
-    </p>
-
-    <p>
-        <label for="input_stat_mana">Mana:</label>
-        <input type="number" value=0 id="input_stat_mana" name="input_stat_mana">
-    </p>
-
-    <p>
-        <label for="input_stat_speed">Speed:</label>
-        <input type="number" value=0 id="input_stat_speed" name="input_stat_speed">
-    </p>
-
-    <p>
-        <label for="input_stat_arcane">Arcane:</label>
-        <input type="number" value=0 id="input_stat_arcane" name="input_stat_arcane">
-    </p>
+    </div>
 
     <br>
     <p>Output:</p>
