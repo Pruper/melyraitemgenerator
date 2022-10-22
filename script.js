@@ -107,7 +107,7 @@ function generateOutput() {
     }
 
     // Stat Group 2
-    if (input.stat_damage != 0 || input.stat_critical != 0 || input.stat_mana != 0) {
+    if (input.stat_strength != 0 || input.stat_damage != 0 || input.stat_critical != 0 || input.stat_mana != 0) {
         output += `,'{"text":""}'`;
         if (input.stat_strength != 0) {
             output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
