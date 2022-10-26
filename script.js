@@ -16,9 +16,10 @@ let input = {
     canBeUpgraded: true,
     stat_health: 0,
     stat_defense: 0,
-    stat_strength: 0,
     stat_damage: 0,
+    stat_strength: 0,
     stat_critical: 0,
+    stat_attackSpeed: 0,
     stat_mana: 0,
     stat_speed: 0,
     stat_arcane: 0
@@ -64,6 +65,8 @@ const attributeUuids = {
 const types = [
     { name: "", attributeUuid: attributeUuids.MAINHAND }, // Normal item
     { name: "Sword", attributeUuid: attributeUuids.MAINHAND },
+    { name: "Dagger", attributeUuid: attributeUuids.MAINHAND },
+    { name: "Spear", attributeUuid: attributeUuids.MAINHAND },
     { name: "Bow", attributeUuid: attributeUuids.MAINHAND },
     { name: "Helmet", attributeUuid: attributeUuids.HEAD },
     { name: "Chestplate", attributeUuid: attributeUuids.CHEST },
@@ -107,21 +110,27 @@ function generateOutput() {
     }
 
     // Stat Group 2
-    if (input.stat_strength != 0 || input.stat_damage != 0 || input.stat_critical != 0 || input.stat_mana != 0) {
+    if (input.stat_damage != 0 || input.stat_strength != 0 || input.stat_critical != 0 || input.stat_attackSpeed != 0 || input.stat_mana != 0) {
         output += `,'{"text":""}'`;
-        if (input.stat_strength != 0) {
-            output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
-            statnbt += `,Strength:${input.stat_strength}`;
-        }
 
         if (input.stat_damage != 0) {
             output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Damage: ","color":"gray"},{"text":"${getSign(input.stat_damage)}","color":"red"}]'`;
             statnbt += `,Damage:${input.stat_damage}`;
         }
 
+        if (input.stat_strength != 0) {
+            output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
+            statnbt += `,Strength:${input.stat_strength}`;
+        }
+
         if (input.stat_critical != 0) {
             output += `,'[{"text":"☣ ","color":"red","italic":false},{"text":"Critical: ","color":"gray"},{"text":"${getSign(input.stat_critical)}%","color":"red"}]'`;
             statnbt += `,Critical:${input.stat_critical}`;
+        }
+
+        if (input.stat_attackSpeed != 0) {
+            output += `,'[{"text":"✲ ","color":"yellow","italic":false},{"text":"Attack Speed: ","color":"gray"},{"text":"${getSign(input.stat_attackSpeed)}%","color":"red"}]'`;
+            statnbt += `,AttackSpeed:${input.stat_attackSpeed}`;
         }
 
         if (input.stat_mana != 0) {
@@ -217,6 +226,9 @@ function loadInputs() {
 
     currentValue = document.getElementById("input_stat_critical").value;
     input.stat_critical = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+
+    currentValue = document.getElementById("input_stat_attackSpeed").value;
+    input.stat_attackSpeed = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
 
     currentValue = document.getElementById("input_stat_mana").value;
     input.stat_mana = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
