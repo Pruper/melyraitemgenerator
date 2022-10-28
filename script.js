@@ -50,7 +50,7 @@ const rarities = [
     { name: "Uncommon", color: "green" },
     { name: "Rare", color: "blue" },
     { name: "Epic", color: "light_purple" },
-    { name: "Legendary", color: "aqua" }
+    { name: "Legendary", color: "aqua" },
 ]
 
 const attributeUuids = {
@@ -186,7 +186,7 @@ function generateOutput() {
     if (statnbt != "{}") {
         output += `,Stats:${statnbt},BaseStats:${statnbt}`;
     }
-    output += `${input.canBeUpgraded === true ? ",Level:0" : ""},AttributeModifiers:[{AttributeName:"generic.luck",Name:"generic.luck",Amount:-0.000999999999,Operation:0,UUID:${types[input.type].attributeUuid.id},Slot:"${types[input.type].attributeUuid.slot}"}]}`;
+    output += `${input.canBeUpgraded === true ? ",Level:0" : ""},AttributeModifiers:[{AttributeName:"minecraft:generic.luck",Amount:-0.000999999999,Operation:0,UUID:${types[input.type].attributeUuid.id},Slot:"${types[input.type].attributeUuid.slot}"}]}`;
 
     return output;
 }
