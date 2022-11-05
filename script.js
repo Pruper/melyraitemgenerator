@@ -11,19 +11,58 @@ let input = {
     dye: null,
     name: "Placeholder Item",
     description: "This item is cool.\nTwo lines!",
-    rarity: 4,
+    rarity: 0,
     type: 0,
-    canBeUpgraded: true,
+    canBeUpgraded: false,
+    color: 10511680,
+    customModelData: 0,
+
     stat_health: 0,
     stat_defense: 0,
+    stat_magicDefense: 0,
+    stat_healthRegeneration: 0,
+    stat_manaRegeneration: 0,
+
     stat_damage: 0,
     stat_strength: 0,
     stat_critical: 0,
+    stat_drawSpeed: 0,
+    stat_overdraw: 0,
     stat_attackSpeed: 0,
+    stat_lifeSteal: 0,
     stat_mana: 0,
+    stat_magicDamage: 0,
+
     stat_speed: 0,
-    stat_arcane: 0
+    stat_arcane: 0,
+    stat_miningSpeed: 0,
+    stat_woodcuttingSpeed: 0,
+    stat_fishingSpeed: 0
 }
+
+const statData = [
+    { id: "health", group: 1, symbol: "❤", numberOfSpaces: 1, symbolColor: "red", numberColor: "green", name: "Health", nbt: "MaxHealth", isPercentage: false },
+    { id: "defense", group: 1, symbol: "❂", numberOfSpaces: 1, symbolColor: "green", numberColor: "green", name: "Defense", nbt: "Defense", isPercentage: false },
+    { id: "magicDefense", group: 1, symbol: "۞", numberOfSpaces: 1, symbolColor: "blue", numberColor: "green", name: "Magic Defense", nbt: "MagicDefense", isPercentage: false },
+    { id: "healthRegeneration", group: 1, symbol: "❣", numberOfSpaces: 1, symbolColor: "red", numberColor: "green", name: "Health Regeneration", nbt: "HealthRegeneration", isPercentage: true },
+    { id: "manaRegeneration", group: 1, symbol: "๑", numberOfSpaces: 1, symbolColor: "blue", numberColor: "green", name: "Mana Regeneration", nbt: "ManaRegeneration", isPercentage: true },
+
+    { id: "damage", group: 2, symbol: "🗡", numberOfSpaces: 1, symbolColor: "red", numberColor: "red", name: "Damage", nbt: "Damage", isPercentage: false },
+    { id: "strength", group: 2, symbol: "❁", numberOfSpaces: 1, symbolColor: "red", numberColor: "red", name: "Strength", nbt: "Strength", isPercentage: false },
+    { id: "critical", group: 2, symbol: "☣", numberOfSpaces: 1, symbolColor: "red", numberColor: "red", name: "Critical", nbt: "Critical", isPercentage: true },
+    { id: "drawSpeed", group: 2, symbol: "➹", numberOfSpaces: 1, symbolColor: "green", numberColor: "red", name: "Draw Speed", nbt: "DrawSpeed", isPercentage: true },
+    { id: "overdraw", group: 2, symbol: "🏹", numberOfSpaces: 1, symbolColor: "blue", numberColor: "red", name: "Overdraw", nbt: "Overdraw", isPercentage: true },
+    { id: "attackSpeed", group: 2, symbol: "✲", numberOfSpaces: 1, symbolColor: "yellow", numberColor: "red", name: "Attack Speed", nbt: "AttackSpeed", isPercentage: true },
+    { id: "lifeSteal", group: 2, symbol: "♡", numberOfSpaces: 1, symbolColor: "white", numberColor: "red", name: "Life Steal", nbt: "LifeSteal", isPercentage: true },
+    { id: "mana", group: 2, symbol: "₪", numberOfSpaces: 1, symbolColor: "aqua", numberColor: "red", name: "Mana", nbt: "Mana", isPercentage: false },
+    { id: "magicDamage", group: 2, symbol: "✯", numberOfSpaces: 1, symbolColor: "aqua", numberColor: "red", name: "Magic Damage", nbt: "MagicDamage", isPercentage: false },
+
+    { id: "speed", group: 3, symbol: "✦", numberOfSpaces: 1, symbolColor: "white", numberColor: "white", name: "Speed", nbt: "Speed", isPercentage: true },
+    { id: "arcane", group: 3, symbol: "¤", numberOfSpaces: 1, symbolColor: "light_purple", numberColor: "white", name: "Arcane", nbt: "Arcane", isPercentage: false },
+    { id: "miningSpeed", group: 3, symbol: "⛏", numberOfSpaces: 1, symbolColor: "gold", numberColor: "white", name: "Mining Speed", nbt: "MiningSpeed", isPercentage: false },
+    { id: "woodcuttingSpeed", group: 3, symbol: "🪓", numberOfSpaces: 1, symbolColor: "gold", numberColor: "white", name: "Woodcutting Speed", nbt: "WoodcuttingSpeed", isPercentage: false },
+    { id: "fishingSpeed", group: 3, symbol: "🎣", numberOfSpaces: 1, symbolColor: "gold", numberColor: "white", name: "Fishing Speed", nbt: "FishingSpeed", isPercentage: false },
+]
 
 const colorCodes = {
     dark_red: "AA0000",
@@ -63,23 +102,31 @@ const attributeUuids = {
 }
 
 const types = [
-    { name: "", attributeUuid: attributeUuids.MAINHAND }, // Normal item
-    { name: "Sword", attributeUuid: attributeUuids.MAINHAND },
-    { name: "Dagger", attributeUuid: attributeUuids.MAINHAND },
-    { name: "Spear", attributeUuid: attributeUuids.MAINHAND },
-    { name: "Bow", attributeUuid: attributeUuids.MAINHAND },
-    { name: "Helmet", attributeUuid: attributeUuids.HEAD },
-    { name: "Chestplate", attributeUuid: attributeUuids.CHEST },
-    { name: "Leggings", attributeUuid: attributeUuids.LEGS },
-    { name: "Boots", attributeUuid: attributeUuids.FEET }
+    { name: "", isTool: false, attributeUuid: attributeUuids.MAINHAND }, // Normal item
+    { name: "Material", isTool: false, attributeUuid: attributeUuids.MAINHAND }, // Material
+    { name: "Pickaxe", isTool: true, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Axe", isTool: true, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Sword", isTool: false, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Dagger", isTool: false, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Spear", isTool: false, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Bow", isTool: false, attributeUuid: attributeUuids.MAINHAND },
+    { name: "Helmet", isTool: false, attributeUuid: attributeUuids.HEAD },
+    { name: "Chestplate", isTool: false, attributeUuid: attributeUuids.CHEST },
+    { name: "Leggings", isTool: false, attributeUuid: attributeUuids.LEGS },
+    { name: "Boots", isTool: false, attributeUuid: attributeUuids.FEET }
 ]
 
 function generateOutput() {
-    let output = `/give @p ${input.itemId}{`;
+    let output = `/give @p ${input.itemId}{display:{`;
+
+    // Leather dye color
+    if (input.itemId.startsWith("leather_") && input.color != 10511680) {
+        output += `color:${input.color},`;
+    }
 
     // Item Name
     input.name = input.name.replaceAll("'", "\\'").replaceAll("\"", "\\" + "\\\"");
-    output += `display:{Name:'{"text":"${input.name}","color":"${rarities[input.rarity].color}","italic":false}'`;
+    output += `Name:'{"text":"${input.name}","color":"${rarities[input.rarity].color}","italic":false}'`;
 
     // Lore
     output += `,Lore:['PlaceholderLore'` // PlaceholderLore tag gets removed, only here for leading comma support.
@@ -95,61 +142,22 @@ function generateOutput() {
     // Stats
     let statnbt = `{Placeholder:1b` // Placeholder tag gets removed, only here for leading comma support.
 
-    // Stat Group 1
-    if (input.stat_health != 0 || input.stat_defense != 0) {
-        output += `,'{"text":""}'`;
-        if (input.stat_health != 0) {
-            output += `,'[{"text":"❤ ","color":"red","italic":false},{"text":"Health: ","color":"gray"},{"text":"${getSign(input.stat_health)}","color":"green"}]'`;
-            statnbt += `,MaxHealth:${input.stat_health}`;
+    // Group 1
+    let sol = JSON.parse(JSON.stringify(statData));
+    sol.sort(function(a, b) {
+        return a - b;
+    });
+
+    let currentGroup = 0;
+    for (i in sol) {
+        if (sol[i].group != currentGroup && input[`stat_${sol[i].id}`] != 0) {
+            output += `,'{"text":""}'`;
+            currentGroup = sol[i].group;
         }
 
-        if (input.stat_defense != 0) {
-            output += `,'[{"text":"❂ ","color":"green","italic":false},{"text":"Defense: ","color":"gray"},{"text":"${getSign(input.stat_defense)}","color":"green"}]'`;
-            statnbt += `,Defense:${input.stat_defense}`;
-        }
-    }
-
-    // Stat Group 2
-    if (input.stat_damage != 0 || input.stat_strength != 0 || input.stat_critical != 0 || input.stat_attackSpeed != 0 || input.stat_mana != 0) {
-        output += `,'{"text":""}'`;
-
-        if (input.stat_damage != 0) {
-            output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Damage: ","color":"gray"},{"text":"${getSign(input.stat_damage)}","color":"red"}]'`;
-            statnbt += `,Damage:${input.stat_damage}`;
-        }
-
-        if (input.stat_strength != 0) {
-            output += `,'[{"text":"❁ ","color":"red","italic":false},{"text":"Strength: ","color":"gray"},{"text":"${getSign(input.stat_strength)}","color":"red"}]'`;
-            statnbt += `,Strength:${input.stat_strength}`;
-        }
-
-        if (input.stat_critical != 0) {
-            output += `,'[{"text":"☣ ","color":"red","italic":false},{"text":"Critical: ","color":"gray"},{"text":"${getSign(input.stat_critical)}%","color":"red"}]'`;
-            statnbt += `,Critical:${input.stat_critical}`;
-        }
-
-        if (input.stat_attackSpeed != 0) {
-            output += `,'[{"text":"✲ ","color":"yellow","italic":false},{"text":"Attack Speed: ","color":"gray"},{"text":"${getSign(input.stat_attackSpeed)}%","color":"red"}]'`;
-            statnbt += `,AttackSpeed:${input.stat_attackSpeed}`;
-        }
-
-        if (input.stat_mana != 0) {
-            output += `,'[{"text":"₪ ","color":"aqua","italic":false},{"text":"Mana: ","color":"gray"},{"text":"${getSign(input.stat_mana)}","color":"red"}]'`;
-            statnbt += `,Mana:${input.stat_mana}`;
-        }
-    }
-
-    // Stat Group 3
-    if (input.stat_speed != 0 || input.stat_arcane != 0) {
-        output += `,'{"text":""}'`;
-        if (input.stat_speed != 0) {
-            output += `,'[{"text":"✦ ","color":"white","italic":false},{"text":"Speed: ","color":"gray"},{"text":"${getSign(input.stat_speed)}%","color":"white"}]'`;
-            statnbt += `,Speed:${input.stat_speed}`;
-        }
-
-        if (input.stat_arcane != 0) {
-            output += `,'[{"text":"¤ ","color":"light_purple","italic":false},{"text":"Arcane: ","color":"gray"},{"text":"${getSign(input.stat_arcane)}","color":"white"}]'`;
-            statnbt += `,Arcane:${input.stat_arcane}`;
+        if (input[`stat_${sol[i].id}`] != 0) {
+            output += `,'[{"text":"${sol[i].symbol}${" ".repeat(sol[i].numberOfSpaces)}","color":"${sol[i].symbolColor}","italic":false},{"text":"${sol[i].name}: ","color":"gray"},{"text":"${getSign(input[`stat_${sol[i].id}`])}${sol[i].isPercentage == true ? "%" : ""}","color":"${sol[i].numberColor}"}]'`;
+            statnbt += `,${sol[i].nbt}:${input[`stat_${sol[i].id}`]}`;
         }
     }
 
@@ -160,7 +168,7 @@ function generateOutput() {
 
     // Can be upgraded?
     if (input.canBeUpgraded === true) {
-        output += `,'{"text":"This item can be upgraded","color":"dark_gray","italic":false}'`;
+        output += `,'{"text":"This item can be upgraded.","color":"dark_gray","italic":false}'`;
     }
 
     // Rarity text
@@ -178,15 +186,30 @@ function generateOutput() {
         output += `,Description:${descriptionnbt}`;
     }
 
-    let outputnamenbttag = input.name.replaceAll("\\'", "'").replaceAll("\\\"", "\"")
-    output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}",Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}',LevelColor:'{"text":"","color":"${"#" + darkenColor(rarities[input.rarity].color, -85)}"}'`
+    let outputnamenbttag = input.name.replaceAll("\\'", "'").replaceAll("\\\"", "\"");
+    output += `,Name:"${outputnamenbttag}",Type:"${types[input.type].name.toUpperCase()}"${types[input.type].isTool === true ? ",isTool:1b" : ""},Rarity:"${rarities[input.rarity].name.toUpperCase()}",RarityColor:'{"text":"","color":"${rarities[input.rarity].color}"}',LevelColor:'{"text":"","color":"${"#" + darkenColor(rarities[input.rarity].color, -85)}"}'`
+
+    // SkullOwner
+    if (input.itemId == "player_head" && input.skullOwner != "") {
+        if (input.skullOwner.length < 17) {
+            output += `,SkullOwner:"${input.skullOwner}"`;
+
+            /*
+
+            /give @p minecraft:player_head{display:{Name:"{\"text\":\"French Fries\"}"},SkullOwner:{Id:[I;-770079510,-1463729170,-2146636326,-1335659767],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjBhNTEwZGI4NGMwMThkOGQyNTBhYjFlZTU2NDQxODUyOWU4OGQzYWYzYWVjMTZmYzFiZGVmNDA4ZDFkNGVjOCJ9fX0="}]}}} 1
+
+            */
+        } else {
+            output += `,SkullOwner:{Id:[I;696969,420420,696969,420420],Properties:{textures:[{Value:"${input.skullOwner}"}]}}`;
+        }
+    }
 
     // Remaining tags (stats, hideflags, attributes...)
-    output += `,HideFlags:7,Unbreakable:1b`;
+    output += `,HideFlags:127,Unbreakable:1b`;
     if (statnbt != "{}") {
         output += `,Stats:${statnbt},BaseStats:${statnbt}`;
     }
-    output += `${input.canBeUpgraded === true ? ",Level:0" : ""},AttributeModifiers:[{AttributeName:"minecraft:generic.luck",Amount:-0.000999999999,Operation:0,UUID:${types[input.type].attributeUuid.id},Slot:"${types[input.type].attributeUuid.slot}"}]}`;
+    output += `${input.canBeUpgraded === true ? ",Level:0,Upgradable:1b" : ""}${input.customModelData > 0 ? `,CustomModelData:${input.customModelData}` : ""},AttributeModifiers:[{AttributeName:"minecraft:generic.luck",Amount:-0.000999999999,Operation:0,UUID:${types[input.type].attributeUuid.id},Slot:"${types[input.type].attributeUuid.slot}"}]}`;
 
     return output;
 }
@@ -212,32 +235,20 @@ function loadInputs() {
     currentValue = document.getElementById("input_canBeUpgraded").checked;
     input.canBeUpgraded = typeof currentValue != 'undefined' ? currentValue : false;
 
-    currentValue = document.getElementById("input_stat_health").value;
-    input.stat_health = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+    currentValue = document.getElementById("input_skullOwner").value;
+    input.skullOwner = currentValue != "" ? currentValue : "";
 
-    currentValue = document.getElementById("input_stat_defense").value;
-    input.stat_defense = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+    currentValue = document.getElementById("input_color").value;
+    input.color = hexToDecimal(currentValue);
 
-    currentValue = document.getElementById("input_stat_strength").value;
-    input.stat_strength = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+    currentValue = document.getElementById(`input_customModelData`).value;
+    input.customModelData = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
 
-    currentValue = document.getElementById("input_stat_damage").value;
-    input.stat_damage = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
-
-    currentValue = document.getElementById("input_stat_critical").value;
-    input.stat_critical = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
-
-    currentValue = document.getElementById("input_stat_attackSpeed").value;
-    input.stat_attackSpeed = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
-
-    currentValue = document.getElementById("input_stat_mana").value;
-    input.stat_mana = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
-
-    currentValue = document.getElementById("input_stat_speed").value;
-    input.stat_speed = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
-
-    currentValue = document.getElementById("input_stat_arcane").value;
-    input.stat_arcane = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+    // STAT INPUTS
+    for (i in statData) {
+        currentValue = document.getElementById(`input_stat_${statData[i].id}`).value;
+        input[`stat_${statData[i].id}`] = !isNaN(parseFloat(currentValue)) ? parseFloat(currentValue) : 0;
+    }
 }
 
 function generateCommand() {
@@ -248,7 +259,6 @@ function generateCommand() {
 
 function generatePreview() {
     loadInputs();
-
     let element = document.getElementById("outputPreview");
 
     let name = JSON.parse(getStringBetweenTwoStrings(generateOutput(), "Name:", ",Lore").replaceAll("'{", "{").replaceAll("}'", "}").replaceAll("'[", "[").replaceAll("]'", "]").replaceAll("\\" + "\\\"", "\\" + "\"").replaceAll("\\\'", "'"));
@@ -386,6 +396,15 @@ function getStringBetweenTwoStrings(text, prefix, suffix) {
     }
     return string;
 };
+
+function hexToDecimal(hex) {
+    hex = hex.replace("#", "");
+    return parseInt(hex, 16);
+}
+
+function resetColor() {
+    document.getElementById("input_color").value = "#a06540";
+}
 
 
 document.getElementById("inputs").addEventListener("change", generatePreview)
