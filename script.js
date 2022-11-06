@@ -168,7 +168,7 @@ function generateOutput() {
 
     // Can be upgraded?
     if (input.canBeUpgraded === true) {
-        output += `,'{"text":"This item can be upgraded.","color":"dark_gray","italic":false}'`;
+        output += `,'{"text":"This item can be upgraded","color":"dark_gray","italic":false}'`;
     }
 
     // Rarity text
